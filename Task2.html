@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Selection</title>
+  <script>
+    function getProductByChoice() {
+      var selectOption = document.getElementById("selectOption");
+      var selectedValue = selectOption.value;
+
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          displayData(data);
+        }
+      };
+      xhr.open("GET", "getProductByChoice?selectedOption=" + selectedValue, true);
+      xhr.send();
+    }
+
+    function displayData(data) {
+      var table = document.getElementById("dataTable");
+      table.innerHTML = ""; // Clear previous data
+
+      // Create table header
+      var headerRow = document.createElement("tr");
+      for (var key in data[0]) {
+        var th = document.createElement("th");
+        th.textContent = key;
+        headerRow.appendChild(th);
+      }
+      table.appendChild(headerRow);
+
+      // Create table rows with data
+      data.forEach(function(item) {
+        var row = document.createElement("tr");
+        for (var key in item) {
+        
+            var cell = document.createElement("td");
+        cell.textContent = item[key];
+        row.appendChild(cell);
+      }
+      row.addEventListener("click", function() {
+        displayDetails(item);
+      });
+      table.appendChild(row);
+    });
+  }
+
+  function displayDetails(item) {
+    console.log(item);
+  }
+  </script>
+</head>
+<body>
+  <h1>Product Selection</h1>
+  <label for="selectOption">Select Option:</label>
+  <select id="selectOption">
+    <option value="option1">Classic Cars</option>
+    <option value="option2">Motorcycles</option>
+    <option value="option3">Planes</option>
+    <option value="option3">Ships</option>
+    <option value="option3">Trains</option>
+    <option value="option3">Trucks and Buses</option>
+    <option value="option3">Vintage Cars</option>
+
+  </select>
+  <button onclick="getProductByChoice()">Get Products</button>
+  <table id="dataTable"></table>
+</body>
+</html>
+ 
